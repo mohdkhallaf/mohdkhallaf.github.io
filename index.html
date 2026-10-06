@@ -1,215 +1,348 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mohamed M. Khallaf | Data Analyst & BI Specialist</title>
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Font Awesome Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <title>Mohamed M. Khallaf | Data Analyst & BI Developer</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    :root {
+      --primary: #10b981;
+      --primary-dark: #059669;
+      --bg-dark: #0f172a;
+      --card-bg: #1e293b;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #334155;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    /* Header / Hero */
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 1.5rem;
+      padding: 3rem 1rem 2rem;
+    }
+    .profile-img {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid var(--primary);
+      box-shadow: 0 10px 25px rgba(16, 185, 129, 0.25);
+    }
+    .hero h1 {
+      font-size: 2.4rem;
+      font-weight: 700;
+    }
+    .hero p.tagline {
+      font-size: 1.2rem;
+      color: var(--primary);
+      font-weight: 500;
+    }
+    .hero p.bio {
+      max-width: 650px;
+      color: var(--text-muted);
+      font-size: 1rem;
+    }
+    .social-links {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 0.5rem;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--card-bg);
+      color: var(--text-main);
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      text-decoration: none;
+      border: 1px solid var(--border);
+      transition: all 0.2s ease;
+      font-size: 0.95rem;
+    }
+    .btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      transform: translateY(-2px);
+    }
+    <img 
+        src="Profile.jpg" 
+        alt="Mohamed M. Khallaf" 
+        class="profile-img" 
+      />
+    .btn-primary {
+      background: var(--primary);
+      color: #0f172a;
+      font-weight: 600;
+      border: none;
+    }
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      color: #fff;
+    }
+
+    /* Section Styling */
+    section {
+      margin-top: 3.5rem;
+    }
+    h2.section-title {
+      font-size: 1.7rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    h2.section-title i {
+      color: var(--primary);
+    }
+
+    /* Grid Layouts */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: border-color 0.2s ease;
+    }
+    .card:hover {
+      border-color: var(--primary);
+    }
+    .card h3 {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+      color: var(--text-main);
+    }
+    .card p {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      margin-bottom: 1rem;
+    }
+    .badge-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: auto;
+    }
+    .badge {
+      background: #0f172a;
+      color: var(--primary);
+      font-size: 0.78rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+    }
+
+    /* Certifications Grid */
+    .cert-card {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.25rem;
+    }
+    .cert-icon {
+      font-size: 2rem;
+      color: var(--primary);
+      flex-shrink: 0;
+    }
+    .cert-details h4 {
+      font-size: 1.05rem;
+      color: var(--text-main);
+      margin-bottom: 0.2rem;
+    }
+    .cert-details span.issuer {
+      font-size: 0.85rem;
+      color: var(--primary);
+      display: block;
+      margin-bottom: 0.4rem;
+    }
+    .cert-details p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    /* Contact Card */
+    .contact-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem;
+      text-align: center;
+      gap: 1.5rem;
+    }
+    .qr-img {
+      width: 170px;
+      height: 170px;
+      border-radius: 8px;
+      background: #fff;
+      padding: 6px;
+    }
+  </style>
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans antialiased">
+<body>
 
-  <!-- Navigation -->
-  <nav class="sticky top-0 z-50 bg-slate-900/80 backdrop-blur border-b border-slate-800">
-    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-      <a href="#" class="text-xl font-bold tracking-tight text-white hover:text-cyan-400 transition">
-        Mohamed <span class="text-cyan-400">Khallaf</span>
-      </a>
-      <div class="hidden md:flex space-x-8 text-sm font-medium text-slate-300">
-        <a href="#about" class="hover:text-cyan-400 transition">About</a>
-        <a href="#skills" class="hover:text-cyan-400 transition">Skills</a>
-        <a href="#projects" class="hover:text-cyan-400 transition">Projects</a>
-        <a href="#contact" class="hover:text-cyan-400 transition">Contact</a>
+  <div class="container">
+    <!-- Header / Bio -->
+    <header class="hero">
+      <img 
+        src="https://www.gravatar.com/avatar/63e185c689d042da7012351239c0f994?s=400&d=mp" 
+        alt="Mohamed M. Khallaf" 
+        class="profile-img" 
+      />
+      <div>
+        <h1>Mohamed M. Khallaf</h1>
+        <p class="tagline">Data Analyst | Power BI Developer | Healthcare Analytics</p>
       </div>
-      <a href="https://www.upwork.com/freelancers/~014b76f212ed42a70b?mp_source=share" target="_blank" rel="noopener noreferrer" class="px-4 py-2 text-sm font-semibold rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 transition">
-        Hire on Upwork
-      </a>
-    </div>
-  </nav>
-
-  <!-- Hero Section -->
-  <header class="max-w-6xl mx-auto px-6 pt-24 pb-20 text-center md:text-left flex flex-col-reverse md:flex-row items-center justify-between gap-12">
-    <div class="max-w-2xl">
-      <span class="inline-block py-1 px-3 mb-4 text-xs font-semibold tracking-wider text-cyan-400 bg-cyan-950/60 border border-cyan-800 rounded-full">
-        Available for Remote & Freelance Roles
-      </span>
-      <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-white leading-tight">
-        Data Analyst &amp; <br />
-        <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
-          Business Intelligence Specialist
-        </span>
-      </h1>
-      <p class="mt-6 text-lg text-slate-400 leading-relaxed">
-        Transforming complex data into clear, interactive Power BI dashboards, optimized SQL models, and actionable domain insights.
-      </p>
-      
-      <!-- CTA Links -->
-      <div class="mt-8 flex flex-wrap gap-4 justify-center md:justify-start">
-        <a href="#projects" class="px-6 py-3 rounded-lg font-semibold bg-cyan-500 hover:bg-cyan-400 text-slate-950 transition shadow-lg shadow-cyan-500/20">
-          View Projects
-        </a>
-        <a href="https://www.linkedin.com/in/meedakh" target="_blank" rel="noopener noreferrer" class="px-6 py-3 rounded-lg font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition">
-          <i class="fa-brands fa-linkedin mr-2"></i>LinkedIn
-        </a>
-        <a href="https://www.github.com/mohdkhallaf" target="_blank" rel="noopener noreferrer" class="px-6 py-3 rounded-lg font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition">
-          <i class="fa-brands fa-github mr-2"></i>GitHub
-        </a>
-      </div>
-    </div>
-  </header>
-
-  <!-- About Section -->
-  <section id="about" class="py-16 border-t border-slate-800/80 bg-slate-900/40">
-    <div class="max-w-4xl mx-auto px-6">
-      <h2 class="text-2xl sm:text-3xl font-bold text-white mb-6">About Me</h2>
-      <p class="text-slate-300 leading-relaxed mb-4">
-        I am a Data Analyst specializing in Business Intelligence, data modeling, and reporting. With a professional background in the medical and healthcare sector, I bring domain perspective to analytics: understanding clinical and operational workflows, defining meaningful metrics, and translating unstructured data into decision-ready executive dashboards.
-      </p>
-      <p class="text-slate-400 leading-relaxed">
-        Whether developing star-schema data models in Power BI, writing complex SQL queries to clean and aggregate transactional data, or using Python for exploratory analysis, I focus on delivering end-to-end solutions that drive operational efficiency.
-      </p>
-    </div>
-  </section>
-
-  <!-- Skills Section -->
-  <section id="skills" class="py-16 border-t border-slate-800/80">
-    <div class="max-w-6xl mx-auto px-6">
-      <h2 class="text-2xl sm:text-3xl font-bold text-white mb-10 text-center md:text-left">Technical Toolkit</h2>
-      
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <!-- Card 1 -->
-        <div class="p-6 bg-slate-900 border border-slate-800 rounded-xl hover:border-cyan-500/40 transition">
-          <div class="w-12 h-12 rounded-lg bg-cyan-950 flex items-center justify-center text-cyan-400 mb-4 text-xl">
-            <i class="fa-solid fa-chart-pie"></i>
-          </div>
-          <h3 class="text-xl font-bold text-white mb-2">Business Intelligence</h3>
-          <p class="text-sm text-slate-400 leading-relaxed mb-4">
-            Power BI, DAX Measures, Power Query, Star Schema Data Modeling, Interactive Dashboards, KPI Tracking.
-          </p>
-          <span class="text-xs text-cyan-400 font-semibold uppercase tracking-wider">PL-300 Aligned</span>
-        </div>
-
-        <!-- Card 2 -->
-        <div class="p-6 bg-slate-900 border border-slate-800 rounded-xl hover:border-cyan-500/40 transition">
-          <div class="w-12 h-12 rounded-lg bg-cyan-950 flex items-center justify-center text-cyan-400 mb-4 text-xl">
-            <i class="fa-solid fa-database"></i>
-          </div>
-          <h3 class="text-xl font-bold text-white mb-2">Database &amp; SQL</h3>
-          <p class="text-sm text-slate-400 leading-relaxed mb-4">
-            Relational Databases, Complex Joins, CTEs, Aggregations, Window Functions, Schema Design, Data Validation.
-          </p>
-          <span class="text-xs text-cyan-400 font-semibold uppercase tracking-wider">Relational Analytics</span>
-        </div>
-
-        <!-- Card 3 -->
-        <div class="p-6 bg-slate-900 border border-slate-800 rounded-xl hover:border-cyan-500/40 transition">
-          <div class="w-12 h-12 rounded-lg bg-cyan-950 flex items-center justify-center text-cyan-400 mb-4 text-xl">
-            <i class="fa-brands fa-python"></i>
-          </div>
-          <h3 class="text-xl font-bold text-white mb-2">Python &amp; Analysis</h3>
-          <p class="text-sm text-slate-400 leading-relaxed mb-4">
-            Pandas, NumPy, Matplotlib, Seaborn, Automated Data Cleaning, Advanced Excel (Pivot Tables, Power Pivot).
-          </p>
-          <span class="text-xs text-cyan-400 font-semibold uppercase tracking-wider">Data Processing</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Projects Section -->
-  <section id="projects" class="py-16 border-t border-slate-800/80 bg-slate-900/40">
-    <div class="max-w-6xl mx-auto px-6">
-      <h2 class="text-2xl sm:text-3xl font-bold text-white mb-10 text-center md:text-left">Featured Projects</h2>
-
-      <div class="space-y-8">
-        <!-- Project 1 -->
-        <div class="p-8 bg-slate-900 border border-slate-800 rounded-xl flex flex-col md:flex-row gap-6 justify-between items-start">
-          <div class="max-w-2xl">
-            <div class="flex items-center gap-3 mb-2">
-              <span class="text-xs font-semibold px-2.5 py-1 bg-cyan-950 text-cyan-300 rounded border border-cyan-800">Power BI</span>
-              <span class="text-xs font-semibold px-2.5 py-1 bg-slate-800 text-slate-300 rounded border border-slate-700">DAX</span>
-              <span class="text-xs font-semibold px-2.5 py-1 bg-slate-800 text-slate-300 rounded border border-slate-700">Healthcare</span>
-            </div>
-            <h3 class="text-xl font-bold text-white">Healthcare Operations &amp; Clinical Metrics Dashboard</h3>
-            <p class="mt-3 text-slate-400 text-sm leading-relaxed">
-              Designed an interactive Power BI solution analyzing patient wait times, department utilization, and operational KPIs. Built using a star-schema model with dynamic DAX calculations for period-over-period trend analysis.
-            </p>
-          </div>
-          <div class="flex md:flex-col gap-3 w-full md:w-auto">
-            <a href="https://www.github.com/mohdkhallaf" target="_blank" rel="noopener noreferrer" class="px-4 py-2 text-center text-sm font-semibold rounded bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition">
-              <i class="fa-brands fa-github mr-2"></i>Repo
-            </a>
-          </div>
-        </div>
-
-        <!-- Project 2 -->
-        <div class="p-8 bg-slate-900 border border-slate-800 rounded-xl flex flex-col md:flex-row gap-6 justify-between items-start">
-          <div class="max-w-2xl">
-            <div class="flex items-center gap-3 mb-2">
-              <span class="text-xs font-semibold px-2.5 py-1 bg-cyan-950 text-cyan-300 rounded border border-cyan-800">SQL</span>
-              <span class="text-xs font-semibold px-2.5 py-1 bg-slate-800 text-slate-300 rounded border border-slate-700">Power BI</span>
-              <span class="text-xs font-semibold px-2.5 py-1 bg-slate-800 text-slate-300 rounded border border-slate-700">Revenue Analysis</span>
-            </div>
-            <h3 class="text-xl font-bold text-white">Business Intelligence &amp; Revenue Analytics</h3>
-            <p class="mt-3 text-slate-400 text-sm leading-relaxed">
-              Extracted and transformed raw transactional records using SQL window functions and CTEs to evaluate customer acquisition costs, average order value, and profit margins through a multi-page BI report.
-            </p>
-          </div>
-          <div class="flex md:flex-col gap-3 w-full md:w-auto">
-            <a href="https://www.github.com/mohdkhallaf" target="_blank" rel="noopener noreferrer" class="px-4 py-2 text-center text-sm font-semibold rounded bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition">
-              <i class="fa-brands fa-github mr-2"></i>SQL Code
-            </a>
-          </div>
-        </div>
-
-        <!-- Project 3 -->
-        <div class="p-8 bg-slate-900 border border-slate-800 rounded-xl flex flex-col md:flex-row gap-6 justify-between items-start">
-          <div class="max-w-2xl">
-            <div class="flex items-center gap-3 mb-2">
-              <span class="text-xs font-semibold px-2.5 py-1 bg-cyan-950 text-cyan-300 rounded border border-cyan-800">Python</span>
-              <span class="text-xs font-semibold px-2.5 py-1 bg-slate-800 text-slate-300 rounded border border-slate-700">Pandas</span>
-              <span class="text-xs font-semibold px-2.5 py-1 bg-slate-800 text-slate-300 rounded border border-slate-700">Automation</span>
-            </div>
-            <h3 class="text-xl font-bold text-white">Automated Data Pipeline &amp; Exploratory Analysis</h3>
-            <p class="mt-3 text-slate-400 text-sm leading-relaxed">
-              Developed automated Python scripts using Pandas to clean inconsistent dataset feeds, handle anomalies, and structure relational tables ready for BI reporting ingestion.
-            </p>
-          </div>
-          <div class="flex md:flex-col gap-3 w-full md:w-auto">
-            <a href="https://www.github.com/mohdkhallaf" target="_blank" rel="noopener noreferrer" class="px-4 py-2 text-center text-sm font-semibold rounded bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition">
-              <i class="fa-brands fa-github mr-2"></i>Notebook
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Contact Section -->
-  <section id="contact" class="py-20 border-t border-slate-800/80 text-center">
-    <div class="max-w-3xl mx-auto px-6">
-      <h2 class="text-3xl font-extrabold text-white mb-4">Let's Connect</h2>
-      <p class="text-slate-400 mb-8 leading-relaxed">
-        Interested in collaborating on a data analytics project or hiring for freelance BI roles? Reach out directly via Upwork, LinkedIn, or email.
+      <p class="bio">
+        Transforming complex clinical and operational records into high-performance Power BI dashboards, optimized star-schema data models, and automated SQL workflows. Aligned with Microsoft PL-300 enterprise standards.
       </p>
 
-      <div class="flex flex-wrap justify-center gap-4">
-        <a href="mailto:mohdkhallaf1986@gmail.com" class="px-6 py-3 rounded-lg font-semibold bg-cyan-500 hover:bg-cyan-400 text-slate-950 transition flex items-center gap-2">
-          <i class="fa-solid fa-envelope"></i> mohdkhallaf1986@gmail.com
+      <div class="social-links">
+        <a href="https://www.upwork.com/freelancers/~014b76f212ed42a70b" target="_blank" class="btn btn-primary">
+          <i class="fa-solid fa-briefcase"></i> Hire on Upwork ($25/hr)
         </a>
-        <a href="https://www.upwork.com/freelancers/~014b76f212ed42a70b?mp_source=share" target="_blank" rel="noopener noreferrer" class="px-6 py-3 rounded-lg font-semibold bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 transition flex items-center gap-2">
-          <i class="fa-solid fa-briefcase"></i> Upwork Profile
+        <a href="https://github.com/mohdkhallaf" target="_blank" class="btn">
+          <i class="fa-brands fa-github"></i> GitHub Repositories
+        </a>
+        <a href="https://www.linkedin.com/in/meedakh" target="_blank" class="btn">
+          <i class="fa-brands fa-linkedin"></i> LinkedIn
+        </a>
+        <a href="mailto:mohdkhallaf1986@gmail.com" class="btn">
+          <i class="fa-solid fa-envelope"></i> Email Me
         </a>
       </div>
-    </div>
-  </section>
+    </header>
 
-  <!-- Footer -->
-  <footer class="py-6 border-t border-slate-900 text-center text-xs text-slate-500">
-    <p>&copy; 2026 Mohamed M. Khallaf. All rights reserved.</p>
-  </footer>
+    <!-- Certifications Section -->
+    <section id="certifications">
+      <h2 class="section-title"><i class="fa-solid fa-award"></i> Professional Certifications & Credentials</h2>
+      <div class="grid">
+        <div class="cert-card">
+          <i class="fa-brands fa-google cert-icon"></i>
+          <div class="cert-details">
+            <h4>Google Data Analytics Professional Certificate</h4>
+            <span class="issuer">Google / Coursera</span>
+            <p>End-to-end data cleaning, SQL analysis, R programming, and interactive data visualization practices.</p>
+          </div>
+        </div>
+
+        <div class="cert-card">
+          <i class="fa-brands fa-microsoft cert-icon"></i>
+          <div class="cert-details">
+            <h4>Microsoft Certified: Power BI Data Analyst (PL-300 Track)</h4>
+            <span class="issuer">Microsoft</span>
+            <p>Advanced star-schema modeling, DAX time-intelligence calculations, row-level security (RLS), and workspace deployment.</p>
+          </div>
+        </div>
+
+        <div class="cert-card">
+          <i class="fa-solid fa-graduation-cap cert-icon"></i>
+          <div class="cert-details">
+            <h4>Advanced Data Analysis Nanodegree</h4>
+            <span class="issuer">Udacity</span>
+            <p>Practical data wrangling, exploratory data analysis using Python (Pandas/NumPy), and statistical modeling.</p>
+          </div>
+        </div>
+
+        <div class="cert-card">
+          <i class="fa-solid fa-certificate cert-icon"></i>
+          <div class="cert-details">
+            <h4>Sprints Data Analysis Certified</h4>
+            <span class="issuer">Sprints</span>
+            <p>Applied SQL database management, operational business intelligence, and real-world business case execution.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Projects -->
+    <section id="projects">
+      <h2 class="section-title"><i class="fa-solid fa-chart-line"></i> Featured Analytics Projects</h2>
+      <div class="grid">
+        <div class="card">
+          <div>
+            <h3>Healthcare Operations & Clinical Throughput</h3>
+            <p>Interactive Power BI operational surveillance dashboard analyzing patient wait times, department throughput, and SLA breach rates with Month-over-Month DAX tracking.</p>
+          </div>
+          <div class="badge-container">
+            <span class="badge">Power BI</span>
+            <span class="badge">DAX</span>
+            <span class="badge">Star Schema</span>
+            <span class="badge">PostgreSQL</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div>
+            <h3>Preventive Medicine & Immunization Analytics</h3>
+            <p>Public health surveillance system monitoring target coverage (>80%), adherence drops, and regional clinical throughput via ArcGIS spatial mapping.</p>
+          </div>
+          <div class="badge-container">
+            <span class="badge">ArcGIS Map</span>
+            <span class="badge">Power BI</span>
+            <span class="badge">DAX</span>
+            <span class="badge">Public Health</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Digital Contact Card -->
+    <section id="contact">
+      <h2 class="section-title"><i class="fa-solid fa-address-card"></i> Instant Digital Contact</h2>
+      <div class="contact-container">
+        <p style="color: var(--text-muted); max-width: 500px;">
+          Scan the QR code with your mobile camera to instantly download and save my full contact details, portfolio links, and email directly to your smartphone.
+        </p>
+        <img 
+          src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=BEGIN%3AVCARD%0AVERSION%3A3.0%0AN%3AKhallaf%3BMohamed%3BM.%3B%3B%0AFN%3AMohamed+M.+Khallaf%0ATITLE%3AData+Analyst+%7C+BI+Developer%0AEMAIL%3BTYPE%3DINTERNET%2CPREF%3Amohdkhallaf1986%40gmail.com%0AURL%3BTYPE%3DLinkedIn%3Ahttps%3A%2F%2Fwww.linkedin.com%2Fin%2Fmeedakh%0AURL%3BTYPE%3DGitHub%3Ahttps%3A%2F%2Fwww.github.com%2Fmohdkhallaf%0AURL%3BTYPE%3DUpwork%3Ahttps%3A%2F%2Fwww.upwork.com%2Ffreelancers%2F%7E014b76f212ed42a70b%0ANOTE%3BPower+BI+%28PL-300%29+%7C+SQL+%7C+Healthcare+Analytics%0AEND%3AVCARD" 
+          alt="Mohamed M. Khallaf vCard QR" 
+          class="qr-img"
+        />
+        <a href="mailto:mohdkhallaf1986@gmail.com" class="btn btn-primary">
+          <i class="fa-solid fa-paper-plane"></i> Get in Touch
+        </a>
+      </div>
+    </section>
+  </div>
 
 </body>
 </html>
