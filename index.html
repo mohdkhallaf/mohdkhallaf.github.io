@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mohamed M. Khallaf | Data Analyst & BI Developer</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <!-- Standalone QR Code Engine (Client-side rendered, no external image APIs) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
     :root {
       --primary: #10b981;
@@ -40,11 +42,17 @@
       gap: 1.5rem;
       padding: 3rem 1rem 2rem;
     }
-    .profile-img {
-      width: 160px;
-      height: 160px;
+    .avatar-badge {
+      width: 130px;
+      height: 130px;
       border-radius: 50%;
-      object-fit: cover;
+      background: linear-gradient(135deg, #059669, #10b981);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      font-weight: 700;
+      color: #0f172a;
       border: 4px solid var(--primary);
       box-shadow: 0 10px 25px rgba(16, 185, 129, 0.25);
     }
@@ -199,29 +207,28 @@
       background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 2rem;
+      padding: 2.5rem 1.5rem;
       text-align: center;
       gap: 1.5rem;
     }
-    .qr-img {
-      width: 170px;
-      height: 170px;
-      border-radius: 8px;
-      background: #fff;
-      padding: 6px;
+    .qr-wrapper {
+      background: #ffffff;
+      padding: 14px;
+      border-radius: 12px;
+      display: inline-block;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    }
+    #qrcode canvas, #qrcode img {
+      display: block;
     }
   </style>
 </head>
 <body>
 
   <div class="container">
-    <!-- Header / Bio -->
+    <!-- Header / Hero Section -->
     <header class="hero">
-      <img 
-        src="https://www.gravatar.com/avatar/63e185c689d042da7012351239c0f994?s=400&d=mp" 
-        alt="Mohamed M. Khallaf" 
-        class="profile-img" 
-      />
+      <div class="avatar-badge">MK</div>
       <div>
         <h1>Mohamed M. Khallaf</h1>
         <p class="tagline">Data Analyst | Power BI Developer | Healthcare Analytics</p>
@@ -325,19 +332,42 @@
       <h2 class="section-title"><i class="fa-solid fa-address-card"></i> Instant Digital Contact</h2>
       <div class="contact-container">
         <p style="color: var(--text-muted); max-width: 500px;">
-          Scan the QR code with your mobile camera to instantly download and save my full contact details, portfolio links, and email directly to your smartphone.
+          Scan this QR code with any smartphone camera to instantly save my contact card, links, and credentials to your phone.
         </p>
-        <img 
-          src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=BEGIN%3AVCARD%0AVERSION%3A3.0%0AN%3AKhallaf%3BMohamed%3BM.%3B%3B%0AFN%3AMohamed+M.+Khallaf%0ATITLE%3AData+Analyst+%7C+BI+Developer%0AEMAIL%3BTYPE%3DINTERNET%2CPREF%3Amohdkhallaf1986%40gmail.com%0AURL%3BTYPE%3DLinkedIn%3Ahttps%3A%2F%2Fwww.linkedin.com%2Fin%2Fmeedakh%0AURL%3BTYPE%3DGitHub%3Ahttps%3A%2F%2Fwww.github.com%2Fmohdkhallaf%0AURL%3BTYPE%3DUpwork%3Ahttps%3A%2F%2Fwww.upwork.com%2Ffreelancers%2F%7E014b76f212ed42a70b%0ANOTE%3BPower+BI+%28PL-300%29+%7C+SQL+%7C+Healthcare+Analytics%0AEND%3AVCARD" 
-          alt="Mohamed M. Khallaf vCard QR" 
-          class="qr-img"
-        />
+        <div class="qr-wrapper">
+          <div id="qrcode"></div>
+        </div>
         <a href="mailto:mohdkhallaf1986@gmail.com" class="btn btn-primary">
           <i class="fa-solid fa-paper-plane"></i> Get in Touch
         </a>
       </div>
     </section>
   </div>
+
+  <script>
+    // Client-side instant QR rendering
+    const vCardData = 
+`BEGIN:VCARD
+VERSION:3.0
+N:Khallaf;Mohamed;M.;;
+FN:Mohamed M. Khallaf
+TITLE:Data Analyst | BI Developer
+EMAIL;TYPE=INTERNET,PREF:mohdkhallaf1986@gmail.com
+URL;TYPE=LinkedIn:https://www.linkedin.com/in/meedakh
+URL;TYPE=GitHub:https://www.github.com/mohdkhallaf
+URL;TYPE=Upwork:https://www.upwork.com/freelancers/~014b76f212ed42a70b
+NOTE:Power BI (PL-300) | SQL | Healthcare Analytics
+END:VCARD`;
+
+    new QRCode(document.getElementById("qrcode"), {
+      text: vCardData,
+      width: 180,
+      height: 180,
+      colorDark: "#0f172a",
+      colorLight: "#ffffff",
+      correctLevel: QRCode.CorrectLevel.M
+    });
+  </script>
 
 </body>
 </html>
