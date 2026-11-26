@@ -6,110 +6,257 @@
   <title>Mohamed M. Khallaf | Healthcare Data Analyst &amp; BI Developer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #0b1120;
-      --surface: #111827;
-      --surface-alt: #1e293b;
-      --border: #334155;
-      --text: #f8fafc;
-      --muted: #94a3b8;
-      --accent: #38bdf8;
-      --accent-dark: #0284c7;
-      --badge-bg: rgba(56, 189, 248, 0.12);
+      --bg-white: #ffffff;
+      --bg-pink-soft: #fff5f8;
+      --bg-pink-tint: #ffe8f0;
+      --surface: #ffffff;
+      --border: #f8cfe0;
+      --border-strong: #f4a8c7;
+      --text-main: #2a121d;
+      --text-muted: #6e4758;
+      --accent: #db2777;
+      --accent-hover: #be185d;
+      --accent-light: #fce7f3;
+      --shadow-soft: 0 12px 32px rgba(219, 39, 119, 0.08);
+      --shadow-hover: 0 20px 44px rgba(219, 39, 119, 0.16);
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-    }
-    a { color: var(--accent); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
 
-    /* Navigation */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(180deg, var(--bg-pink-soft) 0%, var(--bg-white) 35%, var(--bg-pink-soft) 70%, var(--bg-white) 100%);
+      color: var(--text-main);
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: color 0.2s ease; }
+    a:hover { color: var(--accent-hover); }
+
+    .container { max-width: 1140px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 2; }
+
+    /* Sticky Glass Header */
     header {
-      position: sticky; top: 0; z-index: 50;
-      background: rgba(11, 17, 32, 0.9);
-      backdrop-filter: blur(10px);
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       border-bottom: 1px solid var(--border);
+      transition: box-shadow 0.3s ease;
     }
     .nav {
       display: flex; align-items: center; justify-content: space-between;
-      height: 68px; flex-wrap: wrap; gap: 12px;
+      height: 72px; flex-wrap: wrap; gap: 12px;
     }
-    .brand { font-weight: 800; letter-spacing: 0.04em; color: var(--text); font-size: 1.05rem; }
-    .nav-links { display: flex; gap: 20px; flex-wrap: wrap; font-size: 0.92rem; }
-    .nav-links a { color: var(--muted); font-weight: 500; }
-    .nav-links a:hover { color: var(--accent); text-decoration: none; }
+    .brand {
+      font-family: 'Playfair Display', serif;
+      font-weight: 800; letter-spacing: 0.03em;
+      color: var(--text-main); font-size: 1.2rem;
+    }
+    .brand span { color: var(--accent); }
+    .nav-links { display: flex; gap: 24px; flex-wrap: wrap; font-size: 0.93rem; }
+    .nav-links a {
+      color: var(--text-muted); font-weight: 600; position: relative; padding: 4px 0;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; left: 0; bottom: 0;
+      width: 0; height: 2px; background: var(--accent);
+      transition: width 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .nav-links a:hover { color: var(--accent); }
+    .nav-links a:hover::after { width: 100%; }
 
-    /* Hero */
-    .hero { padding: 72px 0 56px; border-bottom: 1px solid var(--border); }
+    /* Ambient Floating Background Orbs (Wix-style motion) */
+    .hero {
+      position: relative;
+      padding: 88px 0 72px;
+      background: radial-gradient(circle at 15% 20%, #ffe4ef 0%, rgba(255, 255, 255, 0) 55%),
+                  radial-gradient(circle at 85% 75%, #ffd6e7 0%, rgba(255, 255, 255, 0) 50%),
+                  var(--bg-white);
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .orb {
+      position: absolute; border-radius: 50%; filter: blur(60px); z-index: 1; pointer-events: none;
+      animation: floatOrb 12s ease-in-out infinite alternate;
+    }
+    .orb-1 {
+      width: 360px; height: 360px; background: rgba(244, 114, 182, 0.22);
+      top: -80px; right: 5%;
+    }
+    .orb-2 {
+      width: 280px; height: 280px; background: rgba(251, 207, 232, 0.45);
+      bottom: -60px; left: 4%; animation-delay: -5s;
+    }
+    @keyframes floatOrb {
+      0% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(-22px, 18px) scale(1.06); }
+      100% { transform: translate(18px, -14px) scale(0.97); }
+    }
+
+    /* Hero Typography & CTA */
     .availability {
-      display: inline-block; background: var(--badge-bg); color: var(--accent);
-      border: 1px solid rgba(56, 189, 248, 0.35);
-      padding: 6px 14px; border-radius: 999px; font-size: 0.85rem; font-weight: 600;
-      margin-bottom: 20px;
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--accent-light); color: var(--accent-hover);
+      border: 1px solid var(--border-strong);
+      padding: 7px 16px; border-radius: 999px; font-size: 0.85rem; font-weight: 700;
+      margin-bottom: 22px;
+      box-shadow: 0 4px 14px rgba(219, 39, 119, 0.08);
     }
-    .hero h1 { font-size: clamp(2rem, 4vw, 3.1rem); font-weight: 800; line-height: 1.15; margin-bottom: 14px; }
-    .hero .subtitle { font-size: 1.15rem; color: var(--accent); font-weight: 600; margin-bottom: 16px; }
-    .hero p { max-width: 740px; color: var(--muted); font-size: 1.05rem; margin-bottom: 28px; }
-    .cta-group { display: flex; flex-wrap: wrap; gap: 12px; }
+    .pulse-dot {
+      width: 8px; height: 8px; border-radius: 50%; background: var(--accent);
+      animation: pulseRing 2s infinite;
+    }
+    @keyframes pulseRing {
+      0% { box-shadow: 0 0 0 0 rgba(219, 39, 119, 0.6); }
+      70% { box-shadow: 0 0 0 8px rgba(219, 39, 119, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(219, 39, 119, 0); }
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.3rem, 4.6vw, 3.6rem);
+      font-weight: 800; line-height: 1.12; margin-bottom: 16px;
+      color: var(--text-main);
+    }
+    .hero h1 span {
+      background: linear-gradient(135deg, #db2777 0%, #f472b6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero .subtitle {
+      font-size: 1.15rem; color: var(--accent); font-weight: 700; margin-bottom: 16px;
+    }
+    .hero p {
+      max-width: 730px; color: var(--text-muted); font-size: 1.06rem; margin-bottom: 32px;
+    }
+
+    .cta-group { display: flex; flex-wrap: wrap; gap: 14px; }
     .btn {
+      position: relative; overflow: hidden;
       display: inline-flex; align-items: center; justify-content: center;
-      padding: 11px 20px; border-radius: 8px; font-weight: 600; font-size: 0.95rem;
-      border: 1px solid var(--border); background: var(--surface); color: var(--text);
-      transition: all 0.15s ease;
+      padding: 12px 22px; border-radius: 999px; font-weight: 700; font-size: 0.94rem;
+      border: 1.5px solid var(--border-strong); background: var(--bg-white); color: var(--text-main);
+      box-shadow: 0 6px 18px rgba(219, 39, 119, 0.06);
+      transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease, background 0.25s ease, color 0.25s ease;
     }
-    .btn:hover { border-color: var(--accent); text-decoration: none; transform: translateY(-1px); }
-    .btn-primary { background: var(--accent-dark); border-color: var(--accent); color: #fff; }
-    .btn-primary:hover { background: var(--accent); color: #0b1120; }
+    .btn:hover {
+      transform: translateY(-3px);
+      border-color: var(--accent);
+      background: var(--bg-pink-soft);
+      color: var(--accent-hover);
+      box-shadow: var(--shadow-hover);
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #db2777 0%, #ec4899 100%);
+      border-color: transparent; color: #ffffff;
+    }
+    .btn-primary::after {
+      content: ''; position: absolute; top: 0; left: -120%; width: 60%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+      transform: skewX(-20deg);
+      animation: btnShine 4.5s infinite;
+    }
+    @keyframes btnShine {
+      0%, 65% { left: -120%; }
+      100% { left: 160%; }
+    }
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #be185d 0%, #db2777 100%);
+      color: #ffffff;
+    }
 
     /* Sections */
-    section { padding: 64px 0; border-bottom: 1px solid var(--border); }
-    .section-title { font-size: 1.75rem; font-weight: 700; margin-bottom: 6px; }
-    .section-sub { color: var(--muted); margin-bottom: 32px; }
+    section { padding: 76px 0; border-bottom: 1px solid var(--border); }
+    section.alt-bg { background: var(--bg-pink-soft); }
+    section.white-bg { background: var(--bg-white); }
 
-    /* About */
-    .about-grid { display: grid; grid-template-columns: 240px 1fr; gap: 36px; align-items: start; }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem; font-weight: 800; margin-bottom: 8px; color: var(--text-main);
+    }
+    .section-sub { color: var(--text-muted); margin-bottom: 36px; font-size: 1.02rem; }
+
+    /* About Grid */
+    .about-grid { display: grid; grid-template-columns: 250px 1fr; gap: 40px; align-items: start; }
+    .profile-wrap {
+      position: relative; padding: 8px; border-radius: 24px;
+      background: linear-gradient(135deg, #f472b6, #fbcfe8, #ffffff);
+      box-shadow: var(--shadow-soft);
+      transition: transform 0.35s ease;
+    }
+    .profile-wrap:hover { transform: translateY(-4px) rotate(-1deg); }
     .profile-pic {
-      width: 240px; height: 240px; object-fit: cover; border-radius: 16px;
-      border: 2px solid var(--border); background: var(--surface-alt);
+      width: 100%; height: 250px; object-fit: cover; border-radius: 18px;
+      display: block; background: var(--bg-pink-tint);
     }
-    .about-body h3 { font-size: 1.35rem; margin-bottom: 12px; }
-    .about-body p { color: var(--muted); margin-bottom: 14px; }
-    .about-body strong { color: var(--text); }
-    .stats-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 24px; }
+    .about-body h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.55rem; margin-bottom: 14px; color: var(--text-main);
+    }
+    .about-body p { color: var(--text-muted); margin-bottom: 14px; }
+    .about-body strong { color: var(--text-main); }
+
+    .stats-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 26px; }
     .stat-card {
-      background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px;
+      background: var(--bg-white); border: 1px solid var(--border); border-radius: 16px; padding: 18px;
+      box-shadow: var(--shadow-soft);
+      transition: transform 0.25s ease, border-color 0.25s ease;
     }
-    .stat-card h4 { font-size: 1.2rem; color: var(--accent); margin-bottom: 4px; }
-    .stat-card span { font-size: 0.88rem; color: var(--muted); }
+    .stat-card:hover { transform: translateY(-4px); border-color: var(--accent); }
+    .stat-card h4 { font-family: 'Playfair Display', serif; font-size: 1.35rem; color: var(--accent); margin-bottom: 4px; }
+    .stat-card span { font-size: 0.88rem; color: var(--text-muted); font-weight: 600; }
 
     /* Cards Grid */
-    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 22px; }
     .card {
-      background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
-      padding: 22px; display: flex; flex-direction: column; justify-content: space-between;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 18px;
+      padding: 24px; display: flex; flex-direction: column; justify-content: space-between;
+      box-shadow: var(--shadow-soft);
+      transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease, border-color 0.3s ease;
     }
-    .card h4 { font-size: 1.08rem; margin-bottom: 6px; color: var(--text); }
-    .card .issuer { font-size: 0.85rem; color: var(--accent); font-weight: 600; margin-bottom: 10px; }
-    .card p { font-size: 0.93rem; color: var(--muted); margin-bottom: 14px; }
-    .card-links { display: flex; gap: 14px; font-size: 0.88rem; font-weight: 600; margin-top: auto; }
+    .card:hover {
+      transform: translateY(-6px);
+      border-color: var(--accent);
+      box-shadow: var(--shadow-hover);
+    }
+    .card h4 { font-size: 1.12rem; font-weight: 700; margin-bottom: 6px; color: var(--text-main); }
+    .card .issuer { font-size: 0.85rem; color: var(--accent); font-weight: 700; margin-bottom: 10px; }
+    .card p { font-size: 0.94rem; color: var(--text-muted); margin-bottom: 16px; }
+    .card-links { display: flex; gap: 16px; font-size: 0.88rem; font-weight: 700; margin-top: auto; }
     .tag {
-      display: inline-block; font-size: 0.78rem; font-weight: 600; color: var(--accent);
-      background: var(--badge-bg); padding: 3px 10px; border-radius: 6px; margin-bottom: 10px; width: fit-content;
+      display: inline-block; font-size: 0.78rem; font-weight: 700; color: var(--accent-hover);
+      background: var(--accent-light); border: 1px solid var(--border);
+      padding: 4px 12px; border-radius: 999px; margin-bottom: 12px; width: fit-content;
+    }
+
+    /* Wix-Style Scroll Reveal Classes */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1), transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     /* Footer */
-    footer { padding: 40px 0; text-align: center; color: var(--muted); font-size: 0.9rem; }
+    footer {
+      padding: 44px 0; text-align: center;
+      background: var(--bg-pink-tint);
+      color: var(--text-muted); font-size: 0.92rem; font-weight: 500;
+    }
 
     @media (max-width: 768px) {
       .about-grid { grid-template-columns: 1fr; }
-      .profile-pic { width: 180px; height: 180px; }
+      .profile-wrap { max-width: 210px; }
+      .profile-pic { height: 210px; }
       .stats-row { grid-template-columns: 1fr; }
     }
   </style>
@@ -118,7 +265,7 @@
 
   <header>
     <div class="container nav">
-      <a href="#" class="brand">MOHAMED M. KHALLAF</a>
+      <a href="#" class="brand">MOHAMED M. <span>KHALLAF</span></a>
       <nav class="nav-links">
         <a href="#about">About</a>
         <a href="#credentials">Credentials</a>
@@ -132,14 +279,19 @@
   <main>
     <!-- Hero Section -->
     <section class="hero">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
       <div class="container">
-        <div class="availability">Available for Remote Data Analytics, SQL &amp; BI Contracts ($20/hr)</div>
-        <h1>Healthcare Intelligence &amp;<br />BI Analytics Architecture</h1>
-        <div class="subtitle">Healthcare Data Analyst | Power BI &amp; SQL Developer | Health Informatics Specialist</div>
-        <p>
+        <div class="availability reveal">
+          <span class="pulse-dot"></span>
+          Available for Remote Data Analytics, SQL &amp; BI Contracts ($20/hr)
+        </div>
+        <h1 class="reveal">Healthcare Intelligence &amp;<br /><span>BI Analytics Architecture</span></h1>
+        <div class="subtitle reveal">Healthcare Data Analyst | Power BI &amp; SQL Developer | Health Informatics Specialist</div>
+        <p class="reveal">
           Delivering end-to-end relational data models, automated SQL &amp; BigQuery pipelines, rapid data cleaning, and executive Power BI &amp; Excel dashboards that turn clinical operations and raw datasets into actionable decisions.
         </p>
-        <div class="cta-group">
+        <div class="cta-group reveal">
           <a href="https://www.upwork.com/freelancers/~014b76f212ed42a70b?mp_source=share" target="_blank" rel="noopener" class="btn btn-primary">Upwork Profile ($20/hr)</a>
           <a href="https://github.com/mohdkhallaf" target="_blank" rel="noopener" class="btn">GitHub Repos</a>
           <a href="https://www.linkedin.com/in/mohdkhallaf" target="_blank" rel="noopener" class="btn">LinkedIn</a>
@@ -149,16 +301,18 @@
     </section>
 
     <!-- About Section -->
-    <section id="about">
+    <section id="about" class="alt-bg">
       <div class="container">
-        <h2 class="section-title">About Me</h2>
-        <p class="section-sub">Combining clinical domain expertise with enterprise data engineering</p>
+        <h2 class="section-title reveal">About Me</h2>
+        <p class="section-sub reveal">Combining clinical domain expertise with enterprise data engineering</p>
 
         <div class="about-grid">
-          <!-- Update src if your uploaded image in the repository has a specific filename (e.g., meeda.jpg or avatar.png) -->
-          <img src="profile.jpg" alt="Mohamed M. Khallaf (Meeda)" class="profile-pic" />
+          <div class="profile-wrap reveal">
+            <!-- Replace profile.jpg with the exact filename uploaded in your repository if different -->
+            <img src="profile.jpg" alt="Mohamed M. Khallaf (Meeda)" class="profile-pic" />
+          </div>
 
-          <div class="about-body">
+          <div class="about-body reveal">
             <h3>Mohamed M. Khallaf (Meeda)</h3>
             <p>
               I am a specialized Business Intelligence Developer and Healthcare Data Analyst holding licensure in
@@ -191,16 +345,16 @@
     </section>
 
     <!-- Credentials Section -->
-    <section id="credentials">
+    <section id="credentials" class="white-bg">
       <div class="container">
-        <h2 class="section-title">Credentials &amp; Certifications</h2>
-        <p class="section-sub">Verified professional qualifications and university-level credentials</p>
-        <div style="margin-bottom: 24px;">
+        <h2 class="section-title reveal">Credentials &amp; Certifications</h2>
+        <p class="section-sub reveal">Verified professional qualifications and university-level credentials</p>
+        <div class="reveal" style="margin-bottom: 28px;">
           <a href="https://drive.google.com/drive/folders/1EyOZJuG5PqNvxGAprLGZHmtXuemOYP4l" target="_blank" rel="noopener" class="btn">Open Google Drive Certificates Folder</a>
         </div>
 
         <div class="grid-3">
-          <div class="card">
+          <div class="card reveal">
             <div>
               <h4>Fellowship Licensure in Health Informatics (FEBHI)</h4>
               <div class="issuer">Ministry of Health &amp; High Committee of Medical Specialties</div>
@@ -208,7 +362,7 @@
             </div>
           </div>
 
-          <div class="card">
+          <div class="card reveal">
             <div>
               <h4>Google Data Analytics Professional Certificate</h4>
               <div class="issuer">Google / Coursera (Dec 2024)</div>
@@ -220,7 +374,7 @@
             </div>
           </div>
 
-          <div class="card">
+          <div class="card reveal">
             <div>
               <h4>Advanced Data Analysis Nanodegree</h4>
               <div class="issuer">Udacity / MCIT Egypt</div>
@@ -228,7 +382,7 @@
             </div>
           </div>
 
-          <div class="card">
+          <div class="card reveal">
             <div>
               <h4>Data Analysis Professional Nanodegree</h4>
               <div class="issuer">Udacity</div>
@@ -236,7 +390,7 @@
             </div>
           </div>
 
-          <div class="card">
+          <div class="card reveal">
             <div>
               <h4>Generative AI &amp; Data Analytics Practical Track</h4>
               <div class="issuer">DataCamp / Sprints</div>
@@ -248,13 +402,13 @@
     </section>
 
     <!-- GitHub Projects Section -->
-    <section id="projects">
+    <section id="projects" class="alt-bg">
       <div class="container">
-        <h2 class="section-title">Featured Projects &amp; GitHub Repositories</h2>
-        <p class="section-sub">Flagship healthcare prototypes and live repositories from github.com/mohdkhallaf</p>
+        <h2 class="section-title reveal">Featured Projects &amp; GitHub Repositories</h2>
+        <p class="section-sub reveal">Flagship healthcare prototypes and live repositories from github.com/mohdkhallaf</p>
 
-        <div class="grid-3" style="margin-bottom: 28px;">
-          <div class="card">
+        <div class="grid-3" style="margin-bottom: 30px;">
+          <div class="card reveal">
             <div>
               <span class="tag">Innova Flagship Prototype</span>
               <h4>Qaraba Care — Clinical Genomics &amp; Kinship Risk</h4>
@@ -267,7 +421,7 @@
             </div>
           </div>
 
-          <div class="card">
+          <div class="card reveal">
             <div>
               <span class="tag">Cloud Healthcare Analytics</span>
               <h4>Healthcare HIS BigQuery Portfolio</h4>
@@ -279,7 +433,7 @@
             </div>
           </div>
 
-          <div class="card">
+          <div class="card reveal">
             <div>
               <span class="tag">BI &amp; Data Preparation</span>
               <h4>Executive Dashboards &amp; Data Cleaning Suite</h4>
@@ -293,33 +447,33 @@
         </div>
 
         <div id="github-repos" class="grid-3">
-          <p style="color: var(--muted);">Loading live repositories from GitHub...</p>
+          <p style="color: var(--text-muted);">Loading live repositories from GitHub...</p>
         </div>
       </div>
     </section>
 
     <!-- Video Channel Section -->
-    <section id="channel">
+    <section id="channel" class="white-bg">
       <div class="container">
-        <h2 class="section-title">Analytics Channel &amp; Walkthroughs</h2>
-        <p class="section-sub">Video demonstrations of Power BI dashboards, DAX logic, and SQL case studies</p>
+        <h2 class="section-title reveal">Analytics Channel &amp; Walkthroughs</h2>
+        <p class="section-sub reveal">Video demonstrations of Power BI dashboards, DAX logic, and SQL case studies</p>
 
         <div class="grid-3">
-          <div class="card">
+          <div class="card reveal">
             <div>
               <span class="tag">Coming Soon</span>
               <h4>Healthcare Operations Dashboard Walkthrough</h4>
               <p>A step-by-step breakdown of star-schema design, wait-time calculations, and SLA breach formulas in Power BI.</p>
             </div>
           </div>
-          <div class="card">
+          <div class="card reveal">
             <div>
               <span class="tag">Coming Soon</span>
               <h4>ArcGIS Geospatial Mapping in Power BI</h4>
               <p>Visualizing public health immunization adherence and regional clinic capacity using spatial clustering.</p>
             </div>
           </div>
-          <div class="card">
+          <div class="card reveal">
             <div>
               <span class="tag">Coming Soon</span>
               <h4>Advanced SQL Window Functions for Reporting</h4>
@@ -331,11 +485,11 @@
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" style="border-bottom: none;">
+    <section id="contact" class="alt-bg" style="border-bottom: none;">
       <div class="container">
-        <h2 class="section-title">Contact &amp; Direct Hire</h2>
-        <p class="section-sub">Reach out for freelance contracts ($20/hr), BI consultations, or data cleaning projects</p>
-        <div class="cta-group">
+        <h2 class="section-title reveal">Contact &amp; Direct Hire</h2>
+        <p class="section-sub reveal">Reach out for freelance contracts ($20/hr), BI consultations, or data cleaning projects</p>
+        <div class="cta-group reveal">
           <a href="mailto:mohdkhallaf1986@gmail.com" class="btn btn-primary">mohdkhallaf1986@gmail.com</a>
           <a href="https://www.upwork.com/freelancers/~014b76f212ed42a70b?mp_source=share" target="_blank" rel="noopener" class="btn">Upwork Profile ($20/hr)</a>
           <a href="https://www.linkedin.com/in/mohdkhallaf" target="_blank" rel="noopener" class="btn">LinkedIn</a>
@@ -352,6 +506,20 @@
   </footer>
 
   <script>
+    // Wix-Style Scroll Reveal Observer with Staggered Delay
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry, index) => {
+        if (entry.isIntersecting) {
+          entry.target.style.transitionDelay = `${(index % 4) * 90}ms`;
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    // Live GitHub Repositories Feed
     async function loadGitHubRepos() {
       const container = document.getElementById('github-repos');
       try {
@@ -362,7 +530,7 @@
           .filter(r => !r.fork)
           .slice(0, 6)
           .map(repo => `
-            <div class="card">
+            <div class="card reveal">
               <div>
                 <h4>${repo.name}</h4>
                 <div class="issuer">${repo.language || 'Analytics / Code'}</div>
@@ -374,8 +542,9 @@
               </div>
             </div>
           `).join('');
+        container.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
       } catch (e) {
-        container.innerHTML = '<p style="color: var(--muted);">Visit <a href="https://github.com/mohdkhallaf" target="_blank" rel="noopener">github.com/mohdkhallaf</a> to explore all repositories.</p>';
+        container.innerHTML = '<p style="color: var(--text-muted);">Visit <a href="https://github.com/mohdkhallaf" target="_blank" rel="noopener">github.com/mohdkhallaf</a> to explore all repositories.</p>';
       }
     }
     loadGitHubRepos();
