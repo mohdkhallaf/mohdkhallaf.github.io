@@ -10,18 +10,19 @@
   <style>
     :root {
       --bg-white: #ffffff;
-      --bg-pink-soft: #fff5f8;
-      --bg-pink-tint: #ffe8f0;
-      --surface: #ffffff;
+      --bg-pink-soft: #fff2f7;
+      --bg-pink-tint: #ffe4ef;
+      --surface: rgba(255, 255, 255, 0.92);
       --border: #f8cfe0;
-      --border-strong: #f4a8c7;
-      --text-main: #2a121d;
-      --text-muted: #6e4758;
+      --border-strong: #f49ec2;
+      --text-main: #2a101b;
+      --text-muted: #6d4355;
       --accent: #db2777;
+      --accent-mid: #ec4899;
       --accent-hover: #be185d;
       --accent-light: #fce7f3;
-      --shadow-soft: 0 12px 32px rgba(219, 39, 119, 0.08);
-      --shadow-hover: 0 20px 44px rgba(219, 39, 119, 0.16);
+      --shadow-soft: 0 12px 32px rgba(219, 39, 119, 0.09);
+      --shadow-hover: 0 22px 48px rgba(219, 39, 119, 0.18);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -29,10 +30,38 @@
 
     body {
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: linear-gradient(180deg, var(--bg-pink-soft) 0%, var(--bg-white) 35%, var(--bg-pink-soft) 70%, var(--bg-white) 100%);
+      background-color: var(--bg-pink-soft);
+      /* Subtle pinky data-grid & soft gradient background */
+      background-image:
+        radial-gradient(circle at 12% 18%, rgba(244, 114, 182, 0.16) 0%, transparent 42%),
+        radial-gradient(circle at 88% 52%, rgba(251, 207, 232, 0.35) 0%, transparent 48%),
+        linear-gradient(to right, rgba(219, 39, 119, 0.045) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(219, 39, 119, 0.045) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 36px 36px, 36px 36px;
       color: var(--text-main);
       line-height: 1.65;
       overflow-x: hidden;
+    }
+
+    /* Interactive Pink Data Constellation Canvas */
+    #pink-data-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Top Scroll Progress Bar */
+    #scroll-progress {
+      position: fixed;
+      top: 0; left: 0;
+      height: 3.5px;
+      width: 0%;
+      background: linear-gradient(90deg, #f472b6, #db2777, #be185d);
+      z-index: 200;
+      transition: width 0.08s linear;
     }
 
     a { color: var(--accent); text-decoration: none; transition: color 0.2s ease; }
@@ -43,11 +72,10 @@
     /* Sticky Glass Header */
     header {
       position: sticky; top: 0; z-index: 100;
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
+      background: rgba(255, 255, 255, 0.84);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--border);
-      transition: box-shadow 0.3s ease;
     }
     .nav {
       display: flex; align-items: center; justify-content: space-between;
@@ -56,99 +84,112 @@
     .brand {
       font-family: 'Playfair Display', serif;
       font-weight: 800; letter-spacing: 0.03em;
-      color: var(--text-main); font-size: 1.2rem;
+      color: var(--text-main); font-size: 1.22rem;
     }
     .brand span { color: var(--accent); }
-    .nav-links { display: flex; gap: 24px; flex-wrap: wrap; font-size: 0.93rem; }
+    .nav-links { display: flex; gap: 22px; flex-wrap: wrap; font-size: 0.93rem; }
     .nav-links a {
       color: var(--text-muted); font-weight: 600; position: relative; padding: 4px 0;
     }
     .nav-links a::after {
       content: ''; position: absolute; left: 0; bottom: 0;
       width: 0; height: 2px; background: var(--accent);
-      transition: width 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+      transition: width 0.3s cubic-bezier(0.22, 1, 0.36, 1);
     }
     .nav-links a:hover { color: var(--accent); }
     .nav-links a:hover::after { width: 100%; }
 
-    /* Ambient Floating Background Orbs (Wix-style motion) */
+    /* Hero Section */
     .hero {
       position: relative;
-      padding: 88px 0 72px;
-      background: radial-gradient(circle at 15% 20%, #ffe4ef 0%, rgba(255, 255, 255, 0) 55%),
-                  radial-gradient(circle at 85% 75%, #ffd6e7 0%, rgba(255, 255, 255, 0) 50%),
-                  var(--bg-white);
+      padding: 92px 0 76px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.88) 0%, rgba(255, 242, 247, 0.72) 100%);
       border-bottom: 1px solid var(--border);
       overflow: hidden;
     }
-    .orb {
-      position: absolute; border-radius: 50%; filter: blur(60px); z-index: 1; pointer-events: none;
-      animation: floatOrb 12s ease-in-out infinite alternate;
+
+    /* Floating Pink Data Wave SVG Divider */
+    .wave-divider {
+      position: absolute; bottom: -1px; left: 0; width: 100%; overflow: hidden; line-height: 0; z-index: 1;
     }
-    .orb-1 {
-      width: 360px; height: 360px; background: rgba(244, 114, 182, 0.22);
-      top: -80px; right: 5%;
-    }
-    .orb-2 {
-      width: 280px; height: 280px; background: rgba(251, 207, 232, 0.45);
-      bottom: -60px; left: 4%; animation-delay: -5s;
-    }
-    @keyframes floatOrb {
-      0% { transform: translate(0, 0) scale(1); }
-      50% { transform: translate(-22px, 18px) scale(1.06); }
-      100% { transform: translate(18px, -14px) scale(0.97); }
+    .wave-divider svg { display: block; width: calc(130% + 1.3px); height: 42px; animation: waveDrift 14s ease-in-out infinite alternate; }
+    @keyframes waveDrift {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-8%); }
     }
 
-    /* Hero Typography & CTA */
     .availability {
       display: inline-flex; align-items: center; gap: 8px;
-      background: var(--accent-light); color: var(--accent-hover);
-      border: 1px solid var(--border-strong);
+      background: var(--bg-white); color: var(--accent-hover);
+      border: 1.5px solid var(--border-strong);
       padding: 7px 16px; border-radius: 999px; font-size: 0.85rem; font-weight: 700;
       margin-bottom: 22px;
-      box-shadow: 0 4px 14px rgba(219, 39, 119, 0.08);
+      box-shadow: 0 6px 18px rgba(219, 39, 119, 0.1);
+      animation: floatBadge 3.8s ease-in-out infinite;
+    }
+    @keyframes floatBadge {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
     }
     .pulse-dot {
-      width: 8px; height: 8px; border-radius: 50%; background: var(--accent);
+      width: 9px; height: 9px; border-radius: 50%; background: var(--accent);
       animation: pulseRing 2s infinite;
     }
     @keyframes pulseRing {
-      0% { box-shadow: 0 0 0 0 rgba(219, 39, 119, 0.6); }
-      70% { box-shadow: 0 0 0 8px rgba(219, 39, 119, 0); }
+      0% { box-shadow: 0 0 0 0 rgba(219, 39, 119, 0.65); }
+      70% { box-shadow: 0 0 0 9px rgba(219, 39, 119, 0); }
       100% { box-shadow: 0 0 0 0 rgba(219, 39, 119, 0); }
     }
 
     .hero h1 {
       font-family: 'Playfair Display', serif;
-      font-size: clamp(2.3rem, 4.6vw, 3.6rem);
+      font-size: clamp(2.35rem, 4.7vw, 3.65rem);
       font-weight: 800; line-height: 1.12; margin-bottom: 16px;
       color: var(--text-main);
     }
     .hero h1 span {
-      background: linear-gradient(135deg, #db2777 0%, #f472b6 100%);
+      background: linear-gradient(135deg, #db2777 0%, #f472b6 55%, #be185d 100%);
+      background-size: 200% auto;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      animation: gradientFlow 5s ease infinite;
     }
-    .hero .subtitle {
-      font-size: 1.15rem; color: var(--accent); font-weight: 700; margin-bottom: 16px;
+    @keyframes gradientFlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
+
+    .subtitle {
+      font-size: 1.16rem; color: var(--accent); font-weight: 700; margin-bottom: 16px;
+      min-height: 1.8em; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+    }
+    .cursor-blink {
+      display: inline-block; width: 2.5px; height: 1.15em; background: var(--accent);
+      animation: blink 0.9s step-end infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+
     .hero p {
       max-width: 730px; color: var(--text-muted); font-size: 1.06rem; margin-bottom: 32px;
     }
 
-    .cta-group { display: flex; flex-wrap: wrap; gap: 14px; }
+    /* Buttons & Brand Icons */
+    .cta-group { display: flex; flex-wrap: wrap; gap: 13px; }
     .btn {
       position: relative; overflow: hidden;
-      display: inline-flex; align-items: center; justify-content: center;
-      padding: 12px 22px; border-radius: 999px; font-weight: 700; font-size: 0.94rem;
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 12px 21px; border-radius: 999px; font-weight: 700; font-size: 0.93rem;
       border: 1.5px solid var(--border-strong); background: var(--bg-white); color: var(--text-main);
-      box-shadow: 0 6px 18px rgba(219, 39, 119, 0.06);
-      transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease, background 0.25s ease, color 0.25s ease;
+      box-shadow: 0 6px 18px rgba(219, 39, 119, 0.07);
+      transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease, background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
     }
+    .btn svg { width: 17px; height: 17px; flex-shrink: 0; transition: transform 0.25s ease; }
+    .btn:hover svg { transform: scale(1.15) rotate(-4deg); }
     .btn:hover {
       transform: translateY(-3px);
       border-color: var(--accent);
-      background: var(--bg-pink-soft);
+      background: var(--accent-light);
       color: var(--accent-hover);
       box-shadow: var(--shadow-hover);
     }
@@ -158,9 +199,9 @@
     }
     .btn-primary::after {
       content: ''; position: absolute; top: 0; left: -120%; width: 60%; height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.38), transparent);
       transform: skewX(-20deg);
-      animation: btnShine 4.5s infinite;
+      animation: btnShine 4.2s infinite;
     }
     @keyframes btnShine {
       0%, 65% { left: -120%; }
@@ -170,34 +211,47 @@
       background: linear-gradient(135deg, #be185d 0%, #db2777 100%);
       color: #ffffff;
     }
+    .btn-fiverr {
+      background: #fff0f6;
+      border-color: #f472b6;
+      color: #be185d;
+    }
+    .btn-fiverr:hover {
+      background: #db2777;
+      border-color: #db2777;
+      color: #ffffff;
+    }
 
     /* Sections */
-    section { padding: 76px 0; border-bottom: 1px solid var(--border); }
-    section.alt-bg { background: var(--bg-pink-soft); }
-    section.white-bg { background: var(--bg-white); }
+    section { position: relative; padding: 80px 0; border-bottom: 1px solid var(--border); z-index: 2; }
+    section.white-glass { background: rgba(255, 255, 255, 0.86); backdrop-filter: blur(8px); }
+    section.pink-glass { background: rgba(255, 242, 247, 0.82); backdrop-filter: blur(8px); }
 
     .section-title {
       font-family: 'Playfair Display', serif;
-      font-size: 2rem; font-weight: 800; margin-bottom: 8px; color: var(--text-main);
+      font-size: 2.05rem; font-weight: 800; margin-bottom: 8px; color: var(--text-main);
     }
     .section-sub { color: var(--text-muted); margin-bottom: 36px; font-size: 1.02rem; }
 
     /* About Grid */
-    .about-grid { display: grid; grid-template-columns: 250px 1fr; gap: 40px; align-items: start; }
+    .about-grid { display: grid; grid-template-columns: 255px 1fr; gap: 40px; align-items: start; }
     .profile-wrap {
-      position: relative; padding: 8px; border-radius: 24px;
-      background: linear-gradient(135deg, #f472b6, #fbcfe8, #ffffff);
+      position: relative; padding: 9px; border-radius: 26px;
+      background: linear-gradient(135deg, #ec4899, #fbcfe8, #ffffff);
       box-shadow: var(--shadow-soft);
-      transition: transform 0.35s ease;
+      animation: floatProfile 5.5s ease-in-out infinite;
     }
-    .profile-wrap:hover { transform: translateY(-4px) rotate(-1deg); }
+    @keyframes floatProfile {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-7px); }
+    }
     .profile-pic {
-      width: 100%; height: 250px; object-fit: cover; border-radius: 18px;
+      width: 100%; height: 255px; object-fit: cover; border-radius: 19px;
       display: block; background: var(--bg-pink-tint);
     }
     .about-body h3 {
       font-family: 'Playfair Display', serif;
-      font-size: 1.55rem; margin-bottom: 14px; color: var(--text-main);
+      font-size: 1.6rem; margin-bottom: 14px; color: var(--text-main);
     }
     .about-body p { color: var(--text-muted); margin-bottom: 14px; }
     .about-body strong { color: var(--text-main); }
@@ -208,20 +262,20 @@
       box-shadow: var(--shadow-soft);
       transition: transform 0.25s ease, border-color 0.25s ease;
     }
-    .stat-card:hover { transform: translateY(-4px); border-color: var(--accent); }
+    .stat-card:hover { transform: translateY(-5px) scale(1.02); border-color: var(--accent); }
     .stat-card h4 { font-family: 'Playfair Display', serif; font-size: 1.35rem; color: var(--accent); margin-bottom: 4px; }
     .stat-card span { font-size: 0.88rem; color: var(--text-muted); font-weight: 600; }
 
-    /* Cards Grid */
-    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 22px; }
+    /* 3D Tilt & Elevated Cards */
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 22px; perspective: 1000px; }
     .card {
-      background: var(--surface); border: 1px solid var(--border); border-radius: 18px;
-      padding: 24px; display: flex; flex-direction: column; justify-content: space-between;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 20px;
+      padding: 25px; display: flex; flex-direction: column; justify-content: space-between;
       box-shadow: var(--shadow-soft);
-      transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+      transform-style: preserve-3d;
+      transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease, border-color 0.3s ease;
     }
     .card:hover {
-      transform: translateY(-6px);
       border-color: var(--accent);
       box-shadow: var(--shadow-hover);
     }
@@ -235,33 +289,41 @@
       padding: 4px 12px; border-radius: 999px; margin-bottom: 12px; width: fit-content;
     }
 
-    /* Wix-Style Scroll Reveal Classes */
-    .reveal {
-      opacity: 0;
-      transform: translateY(28px);
-      transition: opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1), transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
-    }
-    .reveal.visible {
+    /* Varied Wix-Style Scroll Reveal Classes */
+    .reveal-up { opacity: 0; transform: translateY(32px); transition: all 0.75s cubic-bezier(0.22, 1, 0.36, 1); }
+    .reveal-left { opacity: 0; transform: translateX(-36px); transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1); }
+    .reveal-right { opacity: 0; transform: translateX(36px); transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1); }
+    .reveal-zoom { opacity: 0; transform: scale(0.92); filter: blur(4px); transition: all 0.75s cubic-bezier(0.22, 1, 0.36, 1); }
+
+    .reveal-up.visible,
+    .reveal-left.visible,
+    .reveal-right.visible,
+    .reveal-zoom.visible {
       opacity: 1;
-      transform: translateY(0);
+      transform: translate(0, 0) scale(1);
+      filter: blur(0);
     }
 
     /* Footer */
     footer {
+      position: relative; z-index: 2;
       padding: 44px 0; text-align: center;
       background: var(--bg-pink-tint);
-      color: var(--text-muted); font-size: 0.92rem; font-weight: 500;
+      color: var(--text-muted); font-size: 0.92rem; font-weight: 600;
     }
 
     @media (max-width: 768px) {
       .about-grid { grid-template-columns: 1fr; }
-      .profile-wrap { max-width: 210px; }
-      .profile-pic { height: 210px; }
+      .profile-wrap { max-width: 215px; }
+      .profile-pic { height: 215px; }
       .stats-row { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
+
+  <div id="scroll-progress"></div>
+  <canvas id="pink-data-canvas"></canvas>
 
   <header>
     <div class="container nav">
@@ -279,40 +341,71 @@
   <main>
     <!-- Hero Section -->
     <section class="hero">
-      <div class="orb orb-1"></div>
-      <div class="orb orb-2"></div>
       <div class="container">
-        <div class="availability reveal">
+        <div class="availability reveal-zoom">
           <span class="pulse-dot"></span>
           Available for Remote Data Analytics, SQL &amp; BI Contracts ($20/hr)
         </div>
-        <h1 class="reveal">Healthcare Intelligence &amp;<br /><span>BI Analytics Architecture</span></h1>
-        <div class="subtitle reveal">Healthcare Data Analyst | Power BI &amp; SQL Developer | Health Informatics Specialist</div>
-        <p class="reveal">
+        <h1 class="reveal-up">Healthcare Intelligence &amp;<br /><span>BI Analytics Architecture</span></h1>
+        <div class="subtitle reveal-up">
+          <span id="typed-role">Healthcare Data Analyst</span><span class="cursor-blink"></span>
+        </div>
+        <p class="reveal-up">
           Delivering end-to-end relational data models, automated SQL &amp; BigQuery pipelines, rapid data cleaning, and executive Power BI &amp; Excel dashboards that turn clinical operations and raw datasets into actionable decisions.
         </p>
-        <div class="cta-group reveal">
-          <a href="https://www.upwork.com/freelancers/~014b76f212ed42a70b?mp_source=share" target="_blank" rel="noopener" class="btn btn-primary">Upwork Profile ($20/hr)</a>
-          <a href="https://github.com/mohdkhallaf" target="_blank" rel="noopener" class="btn">GitHub Repos</a>
-          <a href="https://www.linkedin.com/in/mohdkhallaf" target="_blank" rel="noopener" class="btn">LinkedIn</a>
-          <a href="mailto:mohdkhallaf1986@gmail.com" class="btn">Email Me</a>
+        <div class="cta-group reveal-up">
+          <!-- Upwork -->
+          <a href="https://www.upwork.com/freelancers/~014b76f212ed42a70b?mp_source=share" target="_blank" rel="noopener" class="btn btn-primary">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.561 13.158c-1.102 0-2.135-.467-3.074-1.227l.228-1.076.008-.042c.207-1.143.849-3.06 2.839-3.06 1.492 0 2.703 1.212 2.703 2.703-.001 1.489-1.212 2.702-2.704 2.702zm0-8.14c-2.539 0-4.51 1.649-5.31 4.366-1.22-1.834-2.148-4.036-2.687-5.892H7.828v7.112c-.002 1.406-1.141 2.546-2.547 2.548-1.405-.002-2.543-1.143-2.545-2.548V3.492H0v7.112c0 2.914 2.37 5.303 5.281 5.303 2.913 0 5.283-2.389 5.283-5.303v-1.19c.529 1.107 1.182 2.229 1.974 3.221l-1.673 7.873h2.797l1.213-5.71c1.063.679 2.285 1.109 3.686 1.109 3 0 5.439-2.452 5.439-5.45 0-3-2.439-5.439-5.439-5.439z"/></svg>
+            Upwork ($20/hr)
+          </a>
+
+          <!-- Fiverr Account Button with Fiverr Emblem -->
+          <a href="https://www.fiverr.com/mohdkhallaf" target="_blank" rel="noopener" class="btn btn-fiverr">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.25 16.25v-10h-10v-.625c0-1.034.841-1.875 1.875-1.875H10V0H8.125A5.632 5.632 0 0 0 2.5 5.625v.625H0V10h2.5v6.25H0V20h8.75v-3.75h-2.5V10h6.285v6.25H10V20h8.75v-3.75h-2.5z"/><circle cx="14.375" cy="1.875" r="1.875"/></svg>
+            Fiverr Gigs
+          </a>
+
+          <!-- GitHub -->
+          <a href="https://github.com/mohdkhallaf" target="_blank" rel="noopener" class="btn">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+            GitHub
+          </a>
+
+          <!-- LinkedIn -->
+          <a href="https://www.linkedin.com/in/mohdkhallaf" target="_blank" rel="noopener" class="btn">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+            LinkedIn
+          </a>
+
+          <!-- Email -->
+          <a href="mailto:mohdkhallaf1986@gmail.com" class="btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            Email Me
+          </a>
         </div>
+      </div>
+
+      <div class="wave-divider">
+        <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+          <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" fill="#fff2f7"></path>
+        </svg>
       </div>
     </section>
 
     <!-- About Section -->
-    <section id="about" class="alt-bg">
+    <section id="about" class="pink-glass">
       <div class="container">
-        <h2 class="section-title reveal">About Me</h2>
-        <p class="section-sub reveal">Combining clinical domain expertise with enterprise data engineering</p>
+        <h2 class="section-title reveal-left">About Me</h2>
+        <p class="section-sub reveal-left">Combining clinical domain expertise with enterprise data engineering</p>
 
         <div class="about-grid">
-          <div class="profile-wrap reveal">
-            <!-- Replace profile.jpg with the exact filename uploaded in your repository if different -->
+          <div class="profile-wrap reveal-left">
+            <!-- Update src if your uploaded image in the repository has a specific filename (e.g., meeda.jpg or photo.png) -->
             <img src="profile.jpg" alt="Mohamed M. Khallaf (Meeda)" class="profile-pic" />
           </div>
 
-          <div class="about-body reveal">
+          <div class="about-body reveal-right">
             <h3>Mohamed M. Khallaf (Meeda)</h3>
             <p>
               I am a specialized Business Intelligence Developer and Healthcare Data Analyst holding licensure in
@@ -326,15 +419,15 @@
             </p>
 
             <div class="stats-row">
-              <div class="stat-card">
+              <div class="stat-card tilt-card">
                 <h4>Board Lic.</h4>
                 <span>Health Informatics (FEBHI)</span>
               </div>
-              <div class="stat-card">
+              <div class="stat-card tilt-card">
                 <h4>Google Cert.</h4>
                 <span>Data Analytics Professional</span>
               </div>
-              <div class="stat-card">
+              <div class="stat-card tilt-card">
                 <h4>$20 / hr</h4>
                 <span>Hourly Contract Rate</span>
               </div>
@@ -345,16 +438,16 @@
     </section>
 
     <!-- Credentials Section -->
-    <section id="credentials" class="white-bg">
+    <section id="credentials" class="white-glass">
       <div class="container">
-        <h2 class="section-title reveal">Credentials &amp; Certifications</h2>
-        <p class="section-sub reveal">Verified professional qualifications and university-level credentials</p>
-        <div class="reveal" style="margin-bottom: 28px;">
+        <h2 class="section-title reveal-up">Credentials &amp; Certifications</h2>
+        <p class="section-sub reveal-up">Verified professional qualifications and university-level credentials</p>
+        <div class="reveal-up" style="margin-bottom: 28px;">
           <a href="https://drive.google.com/drive/folders/1EyOZJuG5PqNvxGAprLGZHmtXuemOYP4l" target="_blank" rel="noopener" class="btn">Open Google Drive Certificates Folder</a>
         </div>
 
         <div class="grid-3">
-          <div class="card reveal">
+          <div class="card tilt-card reveal-zoom">
             <div>
               <h4>Fellowship Licensure in Health Informatics (FEBHI)</h4>
               <div class="issuer">Ministry of Health &amp; High Committee of Medical Specialties</div>
@@ -362,7 +455,7 @@
             </div>
           </div>
 
-          <div class="card reveal">
+          <div class="card tilt-card reveal-zoom">
             <div>
               <h4>Google Data Analytics Professional Certificate</h4>
               <div class="issuer">Google / Coursera (Dec 2024)</div>
@@ -374,7 +467,7 @@
             </div>
           </div>
 
-          <div class="card reveal">
+          <div class="card tilt-card reveal-zoom">
             <div>
               <h4>Advanced Data Analysis Nanodegree</h4>
               <div class="issuer">Udacity / MCIT Egypt</div>
@@ -382,7 +475,7 @@
             </div>
           </div>
 
-          <div class="card reveal">
+          <div class="card tilt-card reveal-zoom">
             <div>
               <h4>Data Analysis Professional Nanodegree</h4>
               <div class="issuer">Udacity</div>
@@ -390,7 +483,7 @@
             </div>
           </div>
 
-          <div class="card reveal">
+          <div class="card tilt-card reveal-zoom">
             <div>
               <h4>Generative AI &amp; Data Analytics Practical Track</h4>
               <div class="issuer">DataCamp / Sprints</div>
@@ -402,13 +495,13 @@
     </section>
 
     <!-- GitHub Projects Section -->
-    <section id="projects" class="alt-bg">
+    <section id="projects" class="pink-glass">
       <div class="container">
-        <h2 class="section-title reveal">Featured Projects &amp; GitHub Repositories</h2>
-        <p class="section-sub reveal">Flagship healthcare prototypes and live repositories from github.com/mohdkhallaf</p>
+        <h2 class="section-title reveal-up">Featured Projects &amp; GitHub Repositories</h2>
+        <p class="section-sub reveal-up">Flagship healthcare prototypes and live repositories from github.com/mohdkhallaf</p>
 
         <div class="grid-3" style="margin-bottom: 30px;">
-          <div class="card reveal">
+          <div class="card tilt-card reveal-up">
             <div>
               <span class="tag">Innova Flagship Prototype</span>
               <h4>Qaraba Care — Clinical Genomics &amp; Kinship Risk</h4>
@@ -421,7 +514,7 @@
             </div>
           </div>
 
-          <div class="card reveal">
+          <div class="card tilt-card reveal-up">
             <div>
               <span class="tag">Cloud Healthcare Analytics</span>
               <h4>Healthcare HIS BigQuery Portfolio</h4>
@@ -433,15 +526,16 @@
             </div>
           </div>
 
-          <div class="card reveal">
+          <div class="card tilt-card reveal-up">
             <div>
               <span class="tag">BI &amp; Data Preparation</span>
               <h4>Executive Dashboards &amp; Data Cleaning Suite</h4>
               <div class="issuer">Power BI • Excel • SQL</div>
-              <p>Star-schema operational dashboards, SLA breach monitoring, and automated dataset cleaning workflows built for rapid business and clinical reporting.</p>
+              <p>Star-schema operational dashboards, SLA breach monitoring, and automated dataset cleaning workflows available on Upwork and Fiverr.</p>
             </div>
             <div class="card-links">
-              <a href="https://www.upwork.com/freelancers/~014b76f212ed42a70b?mp_source=share" target="_blank" rel="noopener">Hire on Upwork ($20/hr)</a>
+              <a href="https://www.upwork.com/freelancers/~014b76f212ed42a70b?mp_source=share" target="_blank" rel="noopener">Upwork ($20/hr)</a>
+              <a href="https://www.fiverr.com/mohdkhallaf" target="_blank" rel="noopener">Fiverr Gigs</a>
             </div>
           </div>
         </div>
@@ -453,27 +547,27 @@
     </section>
 
     <!-- Video Channel Section -->
-    <section id="channel" class="white-bg">
+    <section id="channel" class="white-glass">
       <div class="container">
-        <h2 class="section-title reveal">Analytics Channel &amp; Walkthroughs</h2>
-        <p class="section-sub reveal">Video demonstrations of Power BI dashboards, DAX logic, and SQL case studies</p>
+        <h2 class="section-title reveal-up">Analytics Channel &amp; Walkthroughs</h2>
+        <p class="section-sub reveal-up">Video demonstrations of Power BI dashboards, DAX logic, and SQL case studies</p>
 
         <div class="grid-3">
-          <div class="card reveal">
+          <div class="card tilt-card reveal-left">
             <div>
               <span class="tag">Coming Soon</span>
               <h4>Healthcare Operations Dashboard Walkthrough</h4>
               <p>A step-by-step breakdown of star-schema design, wait-time calculations, and SLA breach formulas in Power BI.</p>
             </div>
           </div>
-          <div class="card reveal">
+          <div class="card tilt-card reveal-up">
             <div>
               <span class="tag">Coming Soon</span>
               <h4>ArcGIS Geospatial Mapping in Power BI</h4>
               <p>Visualizing public health immunization adherence and regional clinic capacity using spatial clustering.</p>
             </div>
           </div>
-          <div class="card reveal">
+          <div class="card tilt-card reveal-right">
             <div>
               <span class="tag">Coming Soon</span>
               <h4>Advanced SQL Window Functions for Reporting</h4>
@@ -485,15 +579,31 @@
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="alt-bg" style="border-bottom: none;">
+    <section id="contact" class="pink-glass" style="border-bottom: none;">
       <div class="container">
-        <h2 class="section-title reveal">Contact &amp; Direct Hire</h2>
-        <p class="section-sub reveal">Reach out for freelance contracts ($20/hr), BI consultations, or data cleaning projects</p>
-        <div class="cta-group reveal">
-          <a href="mailto:mohdkhallaf1986@gmail.com" class="btn btn-primary">mohdkhallaf1986@gmail.com</a>
-          <a href="https://www.upwork.com/freelancers/~014b76f212ed42a70b?mp_source=share" target="_blank" rel="noopener" class="btn">Upwork Profile ($20/hr)</a>
-          <a href="https://www.linkedin.com/in/mohdkhallaf" target="_blank" rel="noopener" class="btn">LinkedIn</a>
-          <a href="https://github.com/mohdkhallaf" target="_blank" rel="noopener" class="btn">GitHub</a>
+        <h2 class="section-title reveal-up">Contact &amp; Direct Hire</h2>
+        <p class="section-sub reveal-up">Reach out for freelance contracts ($20/hr), BI consultations, or urgent data cleaning projects</p>
+        <div class="cta-group reveal-up">
+          <a href="mailto:mohdkhallaf1986@gmail.com" class="btn btn-primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            mohdkhallaf1986@gmail.com
+          </a>
+          <a href="https://www.upwork.com/freelancers/~014b76f212ed42a70b?mp_source=share" target="_blank" rel="noopener" class="btn">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.561 13.158c-1.102 0-2.135-.467-3.074-1.227l.228-1.076.008-.042c.207-1.143.849-3.06 2.839-3.06 1.492 0 2.703 1.212 2.703 2.703-.001 1.489-1.212 2.702-2.704 2.702zm0-8.14c-2.539 0-4.51 1.649-5.31 4.366-1.22-1.834-2.148-4.036-2.687-5.892H7.828v7.112c-.002 1.406-1.141 2.546-2.547 2.548-1.405-.002-2.543-1.143-2.545-2.548V3.492H0v7.112c0 2.914 2.37 5.303 5.281 5.303 2.913 0 5.283-2.389 5.283-5.303v-1.19c.529 1.107 1.182 2.229 1.974 3.221l-1.673 7.873h2.797l1.213-5.71c1.063.679 2.285 1.109 3.686 1.109 3 0 5.439-2.452 5.439-5.45 0-3-2.439-5.439-5.439-5.439z"/></svg>
+            Upwork ($20/hr)
+          </a>
+          <a href="https://www.fiverr.com/mohdkhallaf" target="_blank" rel="noopener" class="btn btn-fiverr">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.25 16.25v-10h-10v-.625c0-1.034.841-1.875 1.875-1.875H10V0H8.125A5.632 5.632 0 0 0 2.5 5.625v.625H0V10h2.5v6.25H0V20h8.75v-3.75h-2.5V10h6.285v6.25H10V20h8.75v-3.75h-2.5z"/><circle cx="14.375" cy="1.875" r="1.875"/></svg>
+            Fiverr
+          </a>
+          <a href="https://www.linkedin.com/in/mohdkhallaf" target="_blank" rel="noopener" class="btn">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+            LinkedIn
+          </a>
+          <a href="https://github.com/mohdkhallaf" target="_blank" rel="noopener" class="btn">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+            GitHub
+          </a>
         </div>
       </div>
     </section>
@@ -506,20 +616,160 @@
   </footer>
 
   <script>
-    // Wix-Style Scroll Reveal Observer with Staggered Delay
+    // 1. Scroll Progress Bar
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      document.getElementById('scroll-progress').style.width = pct + '%';
+    });
+
+    // 2. Typewriter Role Cycler
+    const roles = [
+      'Healthcare Data Analyst | Power BI & SQL Developer',
+      'Health Informatics Specialist (FEBHI Licensed)',
+      'Google Cloud BigQuery & FHIR Data Architect',
+      'Urgent Data Cleaning & Executive Dashboard Expert'
+    ];
+    let roleIdx = 0, charIdx = 0, deleting = false;
+    const typedEl = document.getElementById('typed-role');
+
+    function typeLoop() {
+      const current = roles[roleIdx];
+      if (!deleting) {
+        typedEl.textContent = current.slice(0, ++charIdx);
+        if (charIdx === current.length) {
+          deleting = true;
+          return setTimeout(typeLoop, 2200);
+        }
+        setTimeout(typeLoop, 42);
+      } else {
+        typedEl.textContent = current.slice(0, --charIdx);
+        if (charIdx === 0) {
+          deleting = false;
+          roleIdx = (roleIdx + 1) % roles.length;
+          return setTimeout(typeLoop, 350);
+        }
+        setTimeout(typeLoop, 22);
+      }
+    }
+    setTimeout(typeLoop, 1200);
+
+    // 3. Multi-Directional Scroll Reveal Observer
     const revealObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry, index) => {
         if (entry.isIntersecting) {
-          entry.target.style.transitionDelay = `${(index % 4) * 90}ms`;
+          entry.target.style.transitionDelay = `${(index % 4) * 85}ms`;
           entry.target.classList.add('visible');
           revealObserver.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.12 });
+    }, { threshold: 0.1 });
 
-    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+    function bindReveals(root = document) {
+      root.querySelectorAll('.reveal-up, .reveal-left, .reveal-right, .reveal-zoom').forEach(el => {
+        revealObserver.observe(el);
+      });
+    }
+    bindReveals();
 
-    // Live GitHub Repositories Feed
+    // 4. 3D Perspective Tilt on Cards
+    function bindTilt(root = document) {
+      root.querySelectorAll('.tilt-card').forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+          const rect = card.getBoundingClientRect();
+          const x = (e.clientX - rect.left) / rect.width - 0.5;
+          const y = (e.clientY - rect.top) / rect.height - 0.5;
+          card.style.transform = `perspective(900px) rotateX(${(-y * 7).toFixed(2)}deg) rotateY(${(x * 7).toFixed(2)}deg) translateY(-6px)`;
+        });
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = '';
+        });
+      });
+    }
+    bindTilt();
+
+    // 5. Animated Pinky Data Constellation Background
+    const canvas = document.getElementById('pink-data-canvas');
+    const ctx = canvas.getContext('2d');
+    let width, height, nodes = [];
+    const mouse = { x: -9999, y: -9999 };
+
+    window.addEventListener('mousemove', (e) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    });
+
+    function initCanvas() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+      const count = Math.min(55, Math.floor((width * height) / 24000));
+      nodes = Array.from({ length: count }, () => ({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 0.45,
+        vy: (Math.random() - 0.5) * 0.45,
+        r: Math.random() * 2.6 + 1.4,
+        pulse: Math.random() * Math.PI * 2
+      }));
+    }
+
+    function animateDataNetwork() {
+      ctx.clearRect(0, 0, width, height);
+
+      for (let i = 0; i < nodes.length; i++) {
+        const a = nodes[i];
+        a.x += a.vx;
+        a.y += a.vy;
+        a.pulse += 0.03;
+
+        if (a.x < 0 || a.x > width) a.vx *= -1;
+        if (a.y < 0 || a.y > height) a.vy *= -1;
+
+        // Connect nearby data points with soft pink trend lines
+        for (let j = i + 1; j < nodes.length; j++) {
+          const b = nodes[j];
+          const dx = a.x - b.x;
+          const dy = a.y - b.y;
+          const dist = Math.hypot(dx, dy);
+          if (dist < 145) {
+            ctx.strokeStyle = `rgba(219, 39, 119, ${(1 - dist / 145) * 0.22})`;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b.x, b.y);
+            ctx.stroke();
+          }
+        }
+
+        // Interactive cursor connection
+        const mdx = a.x - mouse.x;
+        const mdy = a.y - mouse.y;
+        const mdist = Math.hypot(mdx, mdy);
+        if (mdist < 170) {
+          ctx.strokeStyle = `rgba(236, 72, 153, ${(1 - mdist / 170) * 0.45})`;
+          ctx.lineWidth = 1.3;
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(mouse.x, mouse.y);
+          ctx.stroke();
+        }
+
+        // Draw pulsing rose-pink data node
+        const radius = a.r + Math.sin(a.pulse) * 0.6;
+        ctx.fillStyle = 'rgba(236, 72, 153, 0.45)';
+        ctx.beginPath();
+        ctx.arc(a.x, a.y, Math.max(1, radius), 0, Math.PI * 2);
+        ctx.fill();
+      }
+      requestAnimationFrame(animateDataNetwork);
+    }
+
+    window.addEventListener('resize', initCanvas);
+    initCanvas();
+    animateDataNetwork();
+
+    // 6. Live GitHub Repositories Feed
     async function loadGitHubRepos() {
       const container = document.getElementById('github-repos');
       try {
@@ -530,7 +780,7 @@
           .filter(r => !r.fork)
           .slice(0, 6)
           .map(repo => `
-            <div class="card reveal">
+            <div class="card tilt-card reveal-zoom">
               <div>
                 <h4>${repo.name}</h4>
                 <div class="issuer">${repo.language || 'Analytics / Code'}</div>
@@ -542,7 +792,8 @@
               </div>
             </div>
           `).join('');
-        container.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+        bindReveals(container);
+        bindTilt(container);
       } catch (e) {
         container.innerHTML = '<p style="color: var(--text-muted);">Visit <a href="https://github.com/mohdkhallaf" target="_blank" rel="noopener">github.com/mohdkhallaf</a> to explore all repositories.</p>';
       }
